@@ -1,12 +1,15 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
+const util = require('util');
+
 const Employee = require("./lib/Employee.js");
 const Manager = require("./lib/Manager.js");
 const Engineer = require("./lib/Engineer.js");
 const Intern = require("./lib/Intern.js");
 
-const employeeArray = []
+// const writeFileAsync = util.promisify(fs.writeFile);
 
+const employeeArray = []
 const questions = [
     {
       type: "input",
@@ -29,12 +32,12 @@ const questions = [
     {
     type: "list",
     message: "Select team member's role",
-    choices: ["Engineer","Intern","Manager"],
+    choices: ["Manager","Engineer","Intern"],
     name: "role"
     }
 ];
 
-function newEmployee() {
+const newEmployee = () => {
     return inquirer.prompt(questions)
       .then(function ({name,id,email,role}){
         let newEmployee;
@@ -97,8 +100,6 @@ function newEmployee() {
                 doNext();
             });
         }
-
-
       });
       
   }
@@ -118,13 +119,113 @@ function doNext(){
             newEmployee();
         } 
         else {
-            generateHTML();
+            const employees = employeeArray
+            generateHTML(employees);
         }
 })
 }
-function generateHTML() {
-  console.log(employeeArray);
-  console.log("HTML");
+function generateHTML(employees){
+    
+    for (let i = 0; i < employees.length; i++) {
+        const element = employees[i];
+
+        if (element.role === "Manager"){
+            const managerName = element.name;
+            const managerId = element.id;
+            const managerRole = element.role;
+            const managerEmail = element.email;
+            const managerOfficeNumber = element.officeNumber;
+    
+            const managerHTML =
+                    `<div class="col-4">
+                        <div class="card mx-auto mb-5 bg-light "
+                            style="width: 18rem; box-shadow: 8px 8px 10px 1px rgba(0, 0, 0, .2);">
+                            <h5 class="card-header bg-primary text-white">${managerName}<br /><br />${managerRole}</h5>
+                            <ul class="list-group  my-5 mx-3">
+                                <li class="list-group-item">ID: ${managerId} </li>
+                                <li class="list-group-item">Email Address:<a href = "mailto: ${managerEmail}">${managerEmail}</a></li>
+                                <li class="list-group-item">Office Number: ${managerOfficeNumber}</li>
+                            </ul>
+                        </div>
+                    </div>`;
+            htmlArray.push(managerHTML);
+        }
+        if (element.role === "Engineer"){
+            const engineerName = element.name;
+            const engineerId = element.id;
+            const engineerRole = element.role;
+            const engineerEmail = element.email;
+            const engineerGithub = element.github;
+    
+            const engineerHTML =
+                    `<div class="col-4">
+                        <div class="card mx-auto mb-5 bg-light "
+                            style="width: 18rem; box-shadow: 8px 8px 10px 1px rgba(0, 0, 0, .2);">
+                            <h5 class="card-header bg-primary text-white">${engineerName}<br /><br />${engineerRole}</h5>
+                            <ul class="list-group  my-5 mx-3">
+                                <li class="list-group-item">ID: ${engineerId} </li>
+                                <li class="list-group-item">Email Address:<a href = "mailto: ${engineerEmail}">${engineerEmail}</a> </li>
+                                <li class="list-group-item">Github: <a href = "https://www.github.com/${engineerGithub}" target = "_blank"> ${engineerGithub}</a></li>
+                            </ul>
+                        </div>
+                    </div>`;
+            htmlArray.push(engineerHTML);
+        }
+        if (element.role === "Intern"){
+            const internName = element.name;
+            const internId = element.id;
+            const internRole = element.role;
+            const internEmail = element.email;
+            const internSchool = element.school;
+    
+            const internHTML =
+                    `<div class="col-4">
+                        <div class="card mx-auto mb-5 bg-light"
+                            style="width: 18rem; box-shadow: 8px 8px 10px 1px rgba(0, 0, 0, .2);">
+                            <h5 class="card-header bg-primary text-white">${internName}<br /><br />${internRole}</h5>
+                            <ul class="list-group  my-5 mx-3">
+                                <li class="list-group-item">ID: ${internId} </li>
+                                <li class="list-group-item">Email Address:<a href = "mailto: ${internEmail}">${internEmail}</a></li>
+                                <li class="list-group-item">School: ${internSchool}</li>
+                            </ul>
+                        </div>
+                    </div>`;
+            htmlArray.push(internHTML);
+        }
+    }
+    htmlArray.push(closingHTML)
+
+    const joinHTML = htmlArray.join(' ');
+    const html = joinHTML.toString();
+    fs.writeFile('index.html', html, (err) =>
+      err ? console.log(err) : console.log('Successfully created index.html!')
+    );
 }
+const htmlArray =[]
+const starterHTML =`<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>My Team</title>
+</head>
+
+<body>
+    <div class="jumbotron jumbotron-fluid bg-danger text-white">
+        <div class="container">
+            <h1 class="display-4 text-center">My Team</h1>
+        </div>
+    </div>
+    <div class="container ">
+                <div class="row d-flex justify-content-evenly">`
+const closingHTML =`
+</div>
+</div>
+</body>
+</html>`
+htmlArray.push(starterHTML)
 
 newEmployee();
+

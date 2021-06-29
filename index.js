@@ -1,129 +1,173 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
-const util = require('util');
 
 const Employee = require("./lib/Employee.js");
 const Manager = require("./lib/Manager.js");
 const Engineer = require("./lib/Engineer.js");
 const Intern = require("./lib/Intern.js");
 
-// const writeFileAsync = util.promisify(fs.writeFile);
-
 const employeeArray = []
-const questions = [
+const htmlArray =[]
+
+const starterHTML =`<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>My Team</title>
+</head>
+
+<body style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+    <div class="jumbotron jumbotron-fluid bg-danger text-white">
+        <div class="container">
+            <h1 class="display-4 text-center">My Team</h1>
+        </div>
+    </div>
+    <div class="container ">
+                <div class="row d-flex justify-content-evenly">`
+const closingHTML =`
+</div>
+</div>
+</body>
+</html>`
+
+
+
+const managersQuestions = [
     {
       type: "input",
-      message: "What is the employee’s name?",
+      message: "Enter the team manager's name:",
       name: "name",
       default: "Tommy",
     },
     {
       type: "input",
-      message: "What is the employee’s ID number?",
+      message: "What is the team manager's ID number?",
+      name: "id",
+      default: "1",
+    },
+    {
+      type: "input",
+      message: "What is the team manager’s email address?",
+      name: "email",
+      default: "manager@penn.com",
+    },
+    {
+        type: "input",
+        message: "What is the team managers’s office number?",
+        name: "officeNumber",
+        default: "215",
+    },
+
+];
+const engineerQuestions = [
+    {
+      type: "input",
+      message: "Enter the engineer's name:",
+      name: "name",
+      default: "Phil",
+    },
+    {
+      type: "input",
+      message: "What is the engineer's ID number?",
+      name: "id",
+      default: "2",
+    },
+    {
+      type: "input",
+      message: "What is the engineer’s email address?",
+      name: "email",
+      default: "engineer@penn.com",
+    },
+    {
+        type: "input",
+        message: "What is the engineer’s GitHub profile?",
+        name: "github",
+        default: "shaneconwell",
+    },
+
+];
+
+const internQuestions = [
+    {
+      type: "input",
+      message: "Enter the intern's name:",
+      name: "name",
+      default: "Brandon",
+    },
+    {
+      type: "input",
+      message: "What is the interns's ID number?",
       name: "id",
       default: "3",
     },
     {
       type: "input",
-      message: "What is the employee’s email address?",
+      message: "What is the interns’s email address?",
       name: "email",
       default: "intern@penn.com",
     },
     {
-    type: "list",
-    message: "Select team member's role",
-    choices: ["Manager","Engineer","Intern"],
-    name: "role"
-    }
+        type: "input",
+        message: "What school is the intern attending?",
+        name: "school",
+        default: "University of Penn",
+    },
+
 ];
-
-const newEmployee = () => {
-    return inquirer.prompt(questions)
-      .then(function ({name,id,email,role}){
-        let newEmployee;
-        newEmployee = new Employee(
-          name,
-          id,
-          email,
-          role,
-        );
-        console.log(newEmployee);
-
-        
-        if (role === "Manager") {
-        //   console.log(role);
-            return inquirer.prompt(
-                {
-                type: "input",
-                message: "What is the managers’s office number?",
-                name: "officeNumber",
-                default: "215",
-                }
-                )
-            .then(function (data){
-                let newManager = new Manager(name,id,email,role,data.officeNumber);
-                employeeArray.push(newManager);
-                // console.log(employeeArray);
-                doNext();
-            });
-            
-        } else if (role === "Engineer") {
-            
-            return inquirer.prompt(
-                {
-                type: "input",
-                message: "What is the engineer’s github username?",
-                name: "github",
-                default: "shaneconwell",
-                }
-                )
-            .then(function (data){
-                let newEngineer = new Engineer(name,id,email,role,data.github);
-                employeeArray.push(newEngineer);
-                // console.log(employeeArray);
-                doNext();
-            });
-        } else if(role === "Intern") {
-            console.log(role);
-            return inquirer.prompt(
-                {
-                type: "input",
-                message: "What is the intern's school?",
-                name: "school",
-                default: "University of Penn",
-                }
-                )
-            .then(function (data){
-                let newIntern = new Intern(name,id,email,role,data.school);
-                employeeArray.push(newIntern);
-                // console.log(employeeArray);
-                doNext();
-            });
-        }
-      });
-      
-  }
+const newManager = () => {
+    return inquirer.prompt(managersQuestions)
+      .then(function ({name,id,email,officeNumber}){
+        let newManager = new Manager(name,id,email,officeNumber,);
+        employeeArray.push(newManager);
+        // console.log(employeeArray);
+        doNext();
+      });    
+}
+const newEngineer = () => {
+    return inquirer.prompt(engineerQuestions)
+      .then(function ({name,id,email,github}){
+        let newEngineer = new Engineer(name,id,email,github);
+        employeeArray.push(newEngineer);
+        // console.log(employeeArray);
+        doNext();
+      });    
+}
+const newIntern = () => {
+    return inquirer.prompt(internQuestions)
+      .then(function ({name,id,email,school}){
+        let newIntern = new Intern(name,id,email,school);
+        employeeArray.push(newIntern);
+        doNext();
+      });    
+}
 
 function doNext(){
     inquirer.prompt(
         {
-        type: "list",
-        message: "Would you like to add another employee?",
-        name: "answer",
-        choices: ['Yes', 'No'],
-        }
+            type: "list",
+            message: "What would you like to do next?",
+            choices: ["Add an Engineer","Add an Intern","Finish building my team"],
+            name: "answer"
+            }
         )
     .then(function (data){
 
-        if (data.answer === 'Yes') {
-            newEmployee();
+        if (data.answer === 'Add an Engineer') {
+            newEngineer();
         } 
+        else if ( data.answer === 'Add an Intern'){
+            newIntern();
+        }
         else {
             const employees = employeeArray
             generateHTML(employees);
         }
-})
+    })
 }
+
 function generateHTML(employees){
     
     for (let i = 0; i < employees.length; i++) {
@@ -143,7 +187,7 @@ function generateHTML(employees){
                             <h5 class="card-header bg-primary text-white">${managerName}<br /><br />${managerRole}</h5>
                             <ul class="list-group  my-5 mx-3">
                                 <li class="list-group-item">ID: ${managerId} </li>
-                                <li class="list-group-item">Email Address:<a href = "mailto: ${managerEmail}">${managerEmail}</a></li>
+                                <li class="list-group-item">Email: <a href = "mailto: ${managerEmail}">${managerEmail}</a></li>
                                 <li class="list-group-item">Office Number: ${managerOfficeNumber}</li>
                             </ul>
                         </div>
@@ -164,7 +208,7 @@ function generateHTML(employees){
                             <h5 class="card-header bg-primary text-white">${engineerName}<br /><br />${engineerRole}</h5>
                             <ul class="list-group  my-5 mx-3">
                                 <li class="list-group-item">ID: ${engineerId} </li>
-                                <li class="list-group-item">Email Address:<a href = "mailto: ${engineerEmail}">${engineerEmail}</a> </li>
+                                <li class="list-group-item">Email: <a href = "mailto: ${engineerEmail}">${engineerEmail}</a> </li>
                                 <li class="list-group-item">Github: <a href = "https://www.github.com/${engineerGithub}" target = "_blank"> ${engineerGithub}</a></li>
                             </ul>
                         </div>
@@ -185,7 +229,7 @@ function generateHTML(employees){
                             <h5 class="card-header bg-primary text-white">${internName}<br /><br />${internRole}</h5>
                             <ul class="list-group  my-5 mx-3">
                                 <li class="list-group-item">ID: ${internId} </li>
-                                <li class="list-group-item">Email Address:<a href = "mailto: ${internEmail}">${internEmail}</a></li>
+                                <li class="list-group-item">Email: <a href = "mailto: ${internEmail}">${internEmail}</a></li>
                                 <li class="list-group-item">School: ${internSchool}</li>
                             </ul>
                         </div>
@@ -197,11 +241,11 @@ function generateHTML(employees){
 
     const joinHTML = htmlArray.join(' ');
     const html = joinHTML.toString();
-    fs.writeFile('index.html', html, (err) =>
+    fs.writeFile('./dist/index.html', html, (err) =>
       err ? console.log(err) : console.log('Successfully created index.html!')
     );
 }
-const htmlArray =[]
+
 const starterHTML =`<!DOCTYPE html>
 <html lang="en">
 
@@ -212,7 +256,7 @@ const starterHTML =`<!DOCTYPE html>
     <title>My Team</title>
 </head>
 
-<body>
+<body style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
     <div class="jumbotron jumbotron-fluid bg-danger text-white">
         <div class="container">
             <h1 class="display-4 text-center">My Team</h1>
@@ -225,7 +269,7 @@ const closingHTML =`
 </div>
 </body>
 </html>`
-htmlArray.push(starterHTML)
 
-newEmployee();
+htmlArray.push(starterHTML)
+newManager();
 

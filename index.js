@@ -34,31 +34,30 @@ const closingHTML =`
 </html>`
 
 
-
 const managersQuestions = [
     {
       type: "input",
       message: "Enter the team manager's name:",
       name: "name",
-      default: "Tommy",
+    //   default: "Tommy",
     },
     {
       type: "input",
       message: "What is the team manager's ID number?",
       name: "id",
-      default: "1",
+    //   default: "1",
     },
     {
       type: "input",
       message: "What is the team manager’s email address?",
       name: "email",
-      default: "manager@penn.com",
+    //   default: "manager@penn.com",
     },
     {
         type: "input",
         message: "What is the team managers’s office number?",
         name: "officeNumber",
-        default: "215",
+        // default: "215",
     },
 
 ];
@@ -67,25 +66,25 @@ const engineerQuestions = [
       type: "input",
       message: "Enter the engineer's name:",
       name: "name",
-      default: "Phil",
+    //   default: "Phil",
     },
     {
       type: "input",
       message: "What is the engineer's ID number?",
       name: "id",
-      default: "2",
+    //   default: "2",
     },
     {
       type: "input",
       message: "What is the engineer’s email address?",
       name: "email",
-      default: "engineer@penn.com",
+    //   default: "engineer@penn.com",
     },
     {
         type: "input",
         message: "What is the engineer’s GitHub profile?",
         name: "github",
-        default: "shaneconwell",
+        // default: "shaneconwell",
     },
 
 ];
@@ -95,25 +94,25 @@ const internQuestions = [
       type: "input",
       message: "Enter the intern's name:",
       name: "name",
-      default: "Brandon",
+    //   default: "Brandon",
     },
     {
       type: "input",
       message: "What is the interns's ID number?",
       name: "id",
-      default: "3",
+    //   default: "3",
     },
     {
       type: "input",
       message: "What is the interns’s email address?",
       name: "email",
-      default: "intern@penn.com",
+    //   default: "intern@penn.com",
     },
     {
         type: "input",
         message: "What school is the intern attending?",
         name: "school",
-        default: "University of Penn",
+        // default: "University of Penn",
     },
 
 ];
@@ -245,30 +244,6 @@ function generateHTML(employees){
       err ? console.log(err) : console.log('Successfully created index.html!')
     );
 }
-
-const starterHTML =`<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <title>My Team</title>
-</head>
-
-<body style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
-    <div class="jumbotron jumbotron-fluid bg-danger text-white">
-        <div class="container">
-            <h1 class="display-4 text-center">My Team</h1>
-        </div>
-    </div>
-    <div class="container ">
-                <div class="row d-flex justify-content-evenly">`
-const closingHTML =`
-</div>
-</div>
-</body>
-</html>`
 
 htmlArray.push(starterHTML)
 newManager();
